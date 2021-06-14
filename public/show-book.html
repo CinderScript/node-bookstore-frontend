@@ -85,7 +85,6 @@
     let notFoundMsg = "<h4>Could not find a book with the entered ID.  Please try again.</h4>"
     let errorMsg = "An unknown error was encountered while searching for this book.";
     let timeoutMsg = "The server timed out while searching for this book.";
-    let workingMsg = "Saving this book...";
 
     function GetBook(){
         if (!ValidateForm("show-book-form"))
@@ -99,10 +98,10 @@
                 displayAddedBook("output", book, "Book Found:");
                 ClearForm("show-book-form");
             }
-            else{
-                if (this.readyState == XMLHttpRequest.DONE && this.status == 500)
+            else if (this.readyState == XMLHttpRequest.DONE && this.status == 500)
                 output.innerHTML = notFoundMsg;
-            }
+            else if (this.readyState == XMLHttpRequest.DONE && this.status == 404)
+                output.innerHTML = notFoundMsg;
         };
         xhttp.onerror = function () { output.innerHTML = errorMsg; };
         xhttp.ontimeout = function () { output.innerHTML = timeoutMsg; };
