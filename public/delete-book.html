@@ -102,19 +102,19 @@
 
         output.innerHTML = loadingMsg;
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function (){
-            if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 let book = JSON.parse(this.responseText);
                 displayAddedBook("output", book, "Book Found:");
                 ClearForm("show-book-form");
                 idLocatedBook = book._id;
                 document.getElementById("btnDelete").classList.remove("d-none");
-            }
-            else{
-                if (this.readyState == XMLHttpRequest.DONE && this.status == 500) {
-                    output.innerHTML = notFoundMsg;
-                    document.getElementById("btnDelete").classList.add("d-none")
-                }
+            } else if (this.readyState == XMLHttpRequest.DONE && this.status == 500) {
+                output.innerHTML = notFoundMsg;
+                document.getElementById("btnDelete").classList.add("d-none")
+            } else if (this.readyState == XMLHttpRequest.DONE && this.status == 404) {
+                output.innerHTML = notFoundMsg;
+                document.getElementById("btnDelete").classList.add("d-none")
             }
         };
         xhttp.onerror = function () { output.innerHTML = errorMsg; };
@@ -130,24 +130,25 @@
 
         output.innerHTML += "<p>" + deletingMsg + "</p>";
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function (){
-            if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
-                alert(this.responseText);
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 output.innerHTML = "<h4>Successfully Deleted the Book: </h4>";
                 output.innerHTML += "<h5>" + idLocatedBook + "</h5>";
                 document.getElementById("btnDelete").classList.add("d-none");
-            }
-            else{
-                if (this.readyState == XMLHttpRequest.DONE && this.status == 500) {
-                    output.innerHTML = notFoundMsg;
-                    document.getElementById("btnDelete").classList.add("d-none")
-                }
+            } else if (this.readyState == XMLHttpRequest.DONE && this.status == 500) {
+                output.innerHTML = notFoundMsg;
+                output.innerHTML += "<p>"+ this.responseText +"</p>";
+                document.getElementById("btnDelete").classList.add("d-none")
+            } else if (this.readyState == XMLHttpRequest.DONE && this.status == 404) {
+                output.innerHTML = notFoundMsg;
+                output.innerHTML += "<p>"+ this.responseText +"</p>";
+                document.getElementById("btnDelete").classList.add("d-none")
             }
         };
         xhttp.onerror = function () { output.innerHTML = "Unknown error trying to delete the book."; };
         xhttp.ontimeout = function () { output.innerHTML = "Server timed out while trying to delete the book."; };
 
-        xhttp.open('DELETE', "https://obscure-shore-43768.herokuapp.com/api/books/"+id.value, true);
+        xhttp.open('DELETE', "https://obscure-shore-43768.herokuapp.com/api/books/"+idLocatedBook, true);
         xhttp.send();
     }
 </script>

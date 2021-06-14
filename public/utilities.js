@@ -2,7 +2,6 @@
 /// URL OF THE REST API ///
 const url = "https://obscure-shore-43768.herokuapp.com/api/books/";
 
-
 function displayAddedBook(elementID, book, msg){
     let table =
         '<table class="table table-bordered table-hover my-0"> \n' +
