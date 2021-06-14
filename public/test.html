@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mercy's Library</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../stylesheets/newStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom" style="background-color: peachpuff">
+        <a class="navbar-brand" href="./public/index.html" style="font-family: 'Gill Sans'"> Mercy's Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto" style="font-size: x-large">
+                <li class="nav-item">
+                    <a class="nav-link" href="Index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-weight: bold; font-size: xx-large; margin-left: 10px; margin-right: 10px">/</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Books.html">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-weight: bold; font-size: xx-large; margin-left: 10px; margin-right: 10px">/</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Show.html">Show</a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-weight: bold; font-size: xx-large; margin-left: 10px; margin-right: 10px">/</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ed.html">Add</a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-weight: bold; font-size: xx-large; margin-left: 10px; margin-right: 10px">/</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Update.html">Update</a>
+                </li>
+                <li class="nav-item">
+                    <a style="font-weight: bold; font-size: xx-large; margin-left: 10px; margin-right: 10px">/</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Remove.html">Remove</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <button class="btn btn-outline-primary" id="btnLoadBooks">Show Books</button>
+
+        <div class="jumbotron" style="background-color:peachpuff; margin-top: 20px" id="output">
+        </div>
+
+    </div>
+
+    <div class="header" style="color: #555555 ; background-color: peachpuff">
+        <p style="margin-top: 20px; text-align: center"> <span style="font-family: 'Gill Sans'; font-size: 30px">Mercy's Library</span>  <br>
+            2983 13th Ave NE<br>
+            Seattle, WA 98114 <br>
+            Open 8:00 a.m. - 11:00 p.m.<br>
+
+            Copyright © 2020 Mercy's Library
+        </p>
+    </div>
+</div>
+
+<script>
+    console.log()
+    function CreateTable(data){
+        let table = "";
+        table =
+            '<table class="table table-bordered table-hover table-light"> \n' +
+            '   <thead>\n' +
+            '       <tr>\n' +
+            '           <th scope="col">Title</th> \n'+
+            '           <th scope="col">Description</th> \n'+
+            '           <th scope="col">Year</th> \n'+
+            '           <th scope="col">Author Name</th> \n'+
+            '           <th scope="col">Price</th> \n'+
+            '       </tr>\n' +
+            '   </thead>\n' +
+            '   <tbody>\n';
+
+        for (let book in data){
+            table +=
+                '       <tr>\n' +
+                '           <td>' + data[book]["title"]+  '</td>\n' +
+                '           <td>' + data[book]["description"]+  '</td>\n' +
+                '           <td>' + data[book]["year"]+  '</td>\n' +
+                '           <td>' + data[book]["author"]+  '</td>\n' +
+                '           <td>' + "$" + data[book]["price"]+  '</td>\n' +
+                '       </tr>\n';
+        }
+
+        table +=
+            '   </tbody>\n' +
+            '</table>\n'
+        return table;
+    }
+    document.getElementById("btnLoadBooks").addEventListener("click", (event) =>{
+        let url = "https://rocky-harbor-56739.herokuapp.com/api/books/"
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function (){
+            if (this.readyState == 4 && this.status == 200){
+                document.getElementById("output").innerHTML =
+                    CreateTable(JSON.parse(this.responseText));
+            }
+        };
+        xhttp.open('GET', url, true);
+        xhttp.send();
+    });
+</script>
+
+</body>
+</html>

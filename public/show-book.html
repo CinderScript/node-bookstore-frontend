@@ -11,6 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
           crossorigin="anonymous">
+
+    <script src="utilities.js"></script>
 </head>
 <body>
 
@@ -48,8 +50,67 @@
 </nav>
 <br><br><br>
 
-show
+<div class="container">
+    <br>
+    <h1>Show Book</h1>
+    <p>Please enter the ID code of the book to fetch from the database.</p>
+</div>
 
+<div class="container">
+    <div class="row">
+        <div class="col shadow-sm p-4">
+            <form id="show-book-form">
+                <h5>Database Search</h5>
+                <div class="mb-3 form-floating">
+                    <input type="text" name="id" id="id" class="form-control"
+                           placeholder="ID" required>
+                    <label for="id">Book ID</label>
+                </div>
+                <button class="btn btn-lg btn-outline-primary shadow-sm" id="btnSearch">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="jumbotron mt-5" id="output"></div>
+</div>
+
+<script>
+    FormInhibitSubmit("show-book-form");
+
+
+    let id = document.getElementById("id");
+    let output = document.getElementById("output");
+    document.getElementById("btnSearch").onclick = GetBook;
+
+    let notFoundMsg = "<h4>Could not find a book with the entered ID.  Please try again.</h4>"
+    let errorMsg = "An unknown error was encountered while searching for this book.";
+    let timeoutMsg = "The server timed out while searching for this book.";
+    let workingMsg = "Saving this book...";
+
+    function GetBook(){
+        if (!ValidateForm("show-book-form"))
+            return;
+
+        output.innerHTML ="Loading Books...";
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function (){
+            if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
+                let book = JSON.parse(this.responseText);
+                displayAddedBook("output", book, "Book Found:");
+                ClearForm("show-book-form");
+            }
+            else{
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 500)
+                output.innerHTML = notFoundMsg;
+            }
+        };
+        xhttp.onerror = function () { output.innerHTML = errorMsg; };
+        xhttp.ontimeout = function () { output.innerHTML = timeoutMsg; };
+
+        xhttp.open('GET', "https://obscure-shore-43768.herokuapp.com/api/books/"+id.value, true);
+        xhttp.send();
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
