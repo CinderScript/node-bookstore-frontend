@@ -237,7 +237,8 @@
         document.getElementById("year").value =         Book.year;
         document.getElementById("author").value =       Book.author;
         document.getElementById("hardcover").checked =  Book.hardCover;
-        document.getElementById("price").value =        Book.title;
+        document.getElementById("paperback").checked =  !Book.hardCover;
+        document.getElementById("price").value =        Book.price;
     }
 
 </script>
